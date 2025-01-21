@@ -40,7 +40,7 @@ fetch(url)
 
 const nextQuote = () => {
   if (citation.value && currentIndex.value < citation.value.length - 1) {
-    currentIndex.value++;
+    currentIndex.value = Math.floor(Math.random() * citation.value.length);
   } else {
     currentIndex.value = 0;
   }

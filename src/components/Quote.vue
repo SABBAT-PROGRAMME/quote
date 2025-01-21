@@ -2,7 +2,7 @@
   <div class="quote-container" prevent-default>
     <article>
       <header class="quote-author">
-        {{ index + 1 }}. <span class="author-text">Auteur :</span> {{ auteur }}
+        <span class="author-text">Auteur :</span> {{ auteur }}
       </header>
       <body>
         <p class="quote-text">{{ citation }}</p>
