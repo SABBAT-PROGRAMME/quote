@@ -1,36 +1,65 @@
-<!-- tamplate -->
 <template>
   <h1>Liste de citations !</h1>
 
-  <p>Voici la citation du jour</p>
-  {{ citation }}
+  <div v-if="citation">
+    <Quote
+      :citation="citation[currentIndex].citation"
+      :auteur="citation[currentIndex].auteur"
+      :date="citation[currentIndex].date"
+      :index="currentIndex"
+    />
+    <button type="button" class="next-button" @click="nextQuote">
+      Citation Suivante
+    </button>
+  </div>
 </template>
 
-<!-- script -->
 <script setup>
 import { ref } from "vue";
+import Quote from "./components/Quote.vue";
 
-let url = "../public/quote.json";
+const url = "/quote.json";
+const citation = ref(null);
 
-let citation = ref("");
-let data = ref("");
-
-// fecth
+const currentIndex = ref(0);
 
 fetch(url)
   .then((response) => {
-    if (response.ok) {
-      return response.json();
+    if (!response.ok) {
+      throw new Error("Erreur réseau lors du chargement du fichier JSON.");
     }
-    throw new Error("Network response was not ok.");
+    return response.json();
   })
   .then((data) => {
+    console.log("Données récupérées :", data);
     citation.value = data;
   })
   .catch((error) => {
-    console.log(error);
+    console.error("Erreur :", error.message);
   });
+
+const nextQuote = () => {
+  if (citation.value && currentIndex.value < citation.value.length - 1) {
+    currentIndex.value++;
+  } else {
+    currentIndex.value = 0;
+  }
+};
 </script>
 
-<!-- style -->
-<style></style>
+<style>
+h1 {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #398712;
+}
+
+button {
+  display: block;
+  margin-left: auto;
+}
+
+.next-button:hover {
+  background-color: #45a049;
+}
+</style>
